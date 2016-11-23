@@ -29,15 +29,6 @@ Copy the applictaion template from the image to your host, the following command
     --link mariadb:mariadb \
     serabalint/yii-advanced
 
-Now as you have the source-code on your host system, mount the application as volume an re-run the container
-
-    cd myapp
-
-    docker run -d -p 8888:80 \
-        -v `pwd`:/app \
-        --name myapp \
-        schmunk42/yii2-app-basic
-
 Access the application under the URLs mentioned above, you can directly edit the files of your application or run commands like
 
     docker exec myapp ./yii
