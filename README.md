@@ -21,10 +21,13 @@ Use `Ctrl+c` to stop the process, you can also start the docker process in the b
 
 Copy the applictaion template from the image to your host, the following command will create a `myapp` app folder in your working directory.
 
-    docker run \
-        -v `pwd`/myapp:/app-install \
-        schmunk42/yii2-app-basic \
-        cp -a /app/. /app-install
+   docker run \
+    -v `pwd`:/app \
+    --name yii-adv \
+    -p 8080:8080 \
+    -p 8081:8081 \
+    --link mariadb:mariadb \
+    serabalint/yii-advanced
 
 Now as you have the source-code on your host system, mount the application as volume an re-run the container
 
