@@ -27,9 +27,11 @@ RUN apt-get update && \
         php5-mysql \
         php5-pgsql \
         php5-xsl && \
+        ruby && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN gem install sass 
 # Initialize application
 WORKDIR /app
 
@@ -43,7 +45,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Install application template and packages
 # Yii 2.0 application and its extensions can be used directly from the image or serve as local cache
 RUN /usr/local/bin/composer create-project --prefer-dist \
-    yiisoft/yii2-app-basic:2.* \
+    yiisoft/yii2-app-advanced \
     /app
 
 # Configure nginx
@@ -59,11 +61,15 @@ RUN ln -sf /dev/stderr /var/log/nginx/error.log
 # Running PHP-FPM as root, required for volumes mounted from host
 RUN sed -i.bak 's/user = www-data/user = root/' /etc/php5/fpm/pool.d/www.conf && \
     sed -i.bak 's/group = www-data/group = root/' /etc/php5/fpm/pool.d/www.conf && \
+    sed -i.bak 's_listen = /var/run/php5-fpm\.sock_listen = 127.0.0.1:9000_' /etc/php5/fpm/pool.d/www.conf && \
     sed -i.bak 's/--fpm-config /-R --fpm-config /' /etc/init.d/php5-fpm
 # /!\ DEVELOPMENT ONLY SETTINGS /!\
 
 ADD run.sh /root/run.sh
 RUN chmod 700 /root/run.sh
 
+
+EXPOSE 8080
+EXPOSE 8081
+
 CMD ["/root/run.sh"]
-EXPOSE 80
