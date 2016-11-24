@@ -18,16 +18,25 @@ for _curVar in `env | awk -F = '{print $1}'`;do
 done
 
 # prepare log output
-mkdir -p /app/runtime/logs /app/web/assets
+mkdir -p /app/frontend/runtime/logs /app/backend/runtime/logs /app/frontend/web/assets /app/backend/web/assets /app/console/runtime/logs /app/log
+
 touch /var/log/nginx/access.log \
-      /var/log/nginx/error.log \
-      /app/runtime/logs/web.log \
-      /app/runtime/logs/console.log
+      /var/log/nginx/error.log 
+
 # adjust folder permissions for docker volume usage
-find /app/runtime -type d -print0 | xargs -0 chmod 777
-find /app/runtime -type f -print0 | xargs -0 chmod 666
-find /app/web/assets -type d -print0 | xargs -0 chmod 777
-find /app/web/assets -type f -print0 | xargs -0 chmod 666
+find /app/frontend/runtime -type d -print0 | xargs -0 chmod 777
+find /app/frontend/runtime -type f -print0 | xargs -0 chmod 666
+
+find /app/backend/runtime -type d -print0 | xargs -0 chmod 777
+find /app/backend/runtime -type f -print0 | xargs -0 chmod 666
+
+find /app/console/runtime -type d -print0 | xargs -0 chmod 777
+find /app/console/runtime -type f -print0 | xargs -0 chmod 666
+
+find /app/frontend/web/assets -type d -print0 | xargs -0 chmod 777
+find /app/frontend/web/assets -type f -print0 | xargs -0 chmod 666
+find /app/backend/web/assets -type d -print0 | xargs -0 chmod 777
+find /app/backend/web/assets -type f -print0 | xargs -0 chmod 666
 
 # start PHP and nginx
 service php5-fpm start
